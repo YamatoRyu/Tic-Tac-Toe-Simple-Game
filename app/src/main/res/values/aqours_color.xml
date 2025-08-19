@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="aqours_color">#51ABF1</color>
+    <color name="you_chan">#66c0ff</color>
+    <color name="shizuku_chan">#01b7ed</color>
+    <color name="red">#FF0000</color>
+
+    <color name="background_aqua">#BF66C0FF</color>
+    <color name="background_red">#BFFF0000</color>
+
+</resources>
