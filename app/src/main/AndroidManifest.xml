@@ -11,21 +11,27 @@
         android:roundIcon="@mipmap/tic_tac_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TicTacToeSimpleGame">
-        <activity
-            android:name=".MultiPlayerActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SoloPlayerActivity"
-            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
+            <intent-filter>
+
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
+
         </activity>
+
+        <activity
+            android:name=".gameplayer.solo_player.PlayerVsComputerActivity"
+            android:exported="false" />
+
+        <activity android:name=".gameplayer.multiplayer.PlayerVsPlayerActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

@@ -1,3 +1,9 @@
 <resources>
+
     <string name="app_name">Tic Tac Toe Simple Game</string>
+
+    <string name="title_game">Tic Tac Toe</string>
+    <string name="solo_player">Player vs Computer</string>
+    <string name="multiplayer">Player vs Player</string>
+
 </resources>
