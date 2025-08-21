@@ -1,11 +1,15 @@
 package protection.member.tic_tac_toe_simple_game.gameplayer.multiplayer
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
@@ -82,7 +86,7 @@ class PlayerVsPlayerActivity : AppCompatActivity() {
             it.setOnClickListener { view ->
                 setAddBoar(it)
 
-                if (getFullBoard()) restartBoard()
+                if (getFullBoard()) restartMessage()
             }
         }
     }
@@ -95,10 +99,27 @@ class PlayerVsPlayerActivity : AppCompatActivity() {
         return true
     }
 
+    @SuppressLint("Recycle")
     private fun setAddBoar(materialButton: MaterialButton) {
         if (materialButton.text != "") return
 
+        val showTextWithAnimation: () -> Unit = {
+            val fadeIn = ObjectAnimator.ofFloat(materialButton, "alpha", 0f, 1f)
+            fadeIn.duration = 600
+            fadeIn.interpolator = AccelerateDecelerateInterpolator()
+
+            val scaleX = ObjectAnimator.ofFloat(materialButton, "scaleX", 0.5f, 1f)
+            val scaleY = ObjectAnimator.ofFloat(materialButton, "scaleY", 0.5f, 1f)
+
+            val animatorSet = AnimatorSet()
+            animatorSet.playTogether(fadeIn, scaleX, scaleY)
+            animatorSet.start()
+
+            materialButton.visibility = View.VISIBLE
+        }
+
         if (yourTurn == MultiPlayerTurn.CIRCLE) {
+            showTextWithAnimation()
             materialButton.text = PLAYER1_TEXT
             materialButton.setTextColor(ContextCompat.getColor(this, R.color.you_chan))
 
@@ -106,6 +127,7 @@ class PlayerVsPlayerActivity : AppCompatActivity() {
         }
 
         else if (yourTurn == MultiPlayerTurn.CROSS) {
+            showTextWithAnimation()
             materialButton.text = PLAYER2_TEXT
             materialButton.setTextColor(Color.RED)
 
@@ -115,9 +137,17 @@ class PlayerVsPlayerActivity : AppCompatActivity() {
         setTurnBoard()
     }
 
-    private fun restartBoard() {
-        Toast.makeText(this, "Reset your again", Toast.LENGTH_LONG).show()
+    private fun restartMessage() {
+        AlertDialog.Builder(this)
+            .setTitle("Draw")
+            .setMessage("Your Score $player1Score - $player2Score")
+            .setPositiveButton("Restart") { dialog, witch ->
+                restartBoard()
+            }
+            .show()
+    }
 
+    private fun restartBoard() {
         for (button in arrayPlayer) button.text = ""
         yourTurn = MultiPlayerTurn.CIRCLE
 
