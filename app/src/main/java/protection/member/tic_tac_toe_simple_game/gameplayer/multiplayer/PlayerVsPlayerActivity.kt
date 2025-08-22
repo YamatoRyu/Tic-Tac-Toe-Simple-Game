@@ -9,10 +9,12 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.delay
 import protection.member.tic_tac_toe_simple_game.R
 import protection.member.tic_tac_toe_simple_game.databinding.ActivityPlayerVsPlayerBinding
 
@@ -40,6 +42,8 @@ class PlayerVsPlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityPlayerVsPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         player1 = binding.player1Score
         player2 = binding.player2Score
@@ -86,9 +90,54 @@ class PlayerVsPlayerActivity : AppCompatActivity() {
             it.setOnClickListener { view ->
                 setAddBoar(it)
 
+                if (checkForVictory(PLAYER1_TEXT)) circleWinner()
+                if (checkForVictory(PLAYER2_TEXT)) crossWinner()
+
                 if (getFullBoard()) restartMessage()
             }
         }
+    }
+
+    private fun circleWinner() {
+        Toast.makeText(this, "Player 1 is Winner", Toast.LENGTH_LONG).show()
+        player1Score += 1
+
+        player1.text = player1Score.toString()
+        restartBoard()
+    }
+
+    private fun crossWinner() {
+        Toast.makeText(this, "Player 2 is Winner", Toast.LENGTH_LONG).show()
+        player2Score += 1
+
+        player2.text = player2Score.toString()
+        restartBoard()
+    }
+
+    private fun checkForVictory(string: String): Boolean {
+        fun match(button: MaterialButton, symbols: String): Boolean = button.text == symbols
+
+        if (
+            (match(binding.button1, string) && match(binding.button2, string) && match(binding.button3, string)) ||
+            (match(binding.button4, string) && match(binding.button5, string) && match(binding.button6, string)) ||
+            (match(binding.button7, string) && match(binding.button8, string) && match(binding.button9, string))
+            )
+            return true
+
+        if (
+            (match(binding.button1, string) && match(binding.button4, string) && match(binding.button7, string)) ||
+            (match(binding.button2, string) && match(binding.button5, string) && match(binding.button8, string)) ||
+            (match(binding.button3, string) && match(binding.button6, string) && match(binding.button9, string))
+            )
+            return true
+
+        if (
+            (match(binding.button1, string) && match(binding.button5, string) && match(binding.button9, string)) ||
+            (match(binding.button3, string) && match(binding.button5, string) && match(binding.button7, string))
+            )
+            return true
+
+        return false
     }
 
     private fun getFullBoard(): Boolean {
